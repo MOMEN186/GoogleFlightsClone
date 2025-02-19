@@ -115,7 +115,7 @@ export default function CountrySelect({ to, from, setTo, setFrom, trip }) {
               <SwapHorizIcon />
             </IconButton>
 
-            <Grid item>
+            <Grid display={"flex"} item>
               <Autocomplete
                 sx={{minWidth:"200px"}}
                 multiple
@@ -126,7 +126,6 @@ export default function CountrySelect({ to, from, setTo, setFrom, trip }) {
                 }
                 value={to||[]}
                 onChange={(_, newValue) => {
-                  // console.log(newValue);
                   setTo(newValue);
                 }}
                 renderInput={(params) => (

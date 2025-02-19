@@ -18,31 +18,34 @@ const Calendar = ({
   const [highlightedDays, setHighlightedDays] = useState({});
 
   useEffect(() => {
+    console.log(from, to);
     async function fetchData() {
       try {
         const prices = await getPriceCalendar(
           from,
           to,
           departureDate,
-          trip==="one way"?undefined:returnDate
+          trip.value==="one way"?undefined:returnDate
         );
         setHighlightedDays(prices);
       } catch (error) {
         console.error("Error:", error);
       }
     }
+    fetchData()
+  }, [from, to, returnDate, departureDate,trip]);
 
-    fetchData();
-  }, [from, to, returnDate, departureDate]);
+
 
   useEffect(() => {
-    if (departureDate.isAfter(returnDate) && trip!=="one way") {
+    if (departureDate?.isAfter(returnDate) && trip!=="one way") {
       const temp = departureDate;
       setDepartureDate(returnDate);
       setReturnDate(temp);
     }
   }, [returnDate, departureDate]);
 
+  
   function ServerDay(props) {
     const { day, selected, ...other } = props;
     const dateStr = day.format("YYYY-MM-DD"); // Format the day to match the API response
@@ -85,12 +88,15 @@ const Calendar = ({
       {trip !== "one way" && (
         <DatePicker
           value={returnDate}
-          onChange={(newValue) => setReturnDate(newValue)}
+          onChange={(newValue) => {
+            console.log(newValue)
+            setReturnDate(newValue)
+          }}
           disablePast
           slots={{ day: ServerDay }}
           slotProps={{
             textField: {
-              label: "Arrival",
+              label: "Return",
             },
           }}
         />

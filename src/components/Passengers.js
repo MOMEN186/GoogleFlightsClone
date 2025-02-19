@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import RemoveIcon from "@mui/icons-material/Remove";
 import PersonIcon from "@mui/icons-material/Person";
@@ -16,11 +16,11 @@ export default function Passengers({ passengers, setPassengers }) {
   const [sum, setSum] = useState(1);
 
   const handleChange = (key, value) => {
-    console.log("", key, value);
+    console.log("", key, value,sum+value);
     setSum(sum + value);
     setPassengers((prev) => ({
       ...prev,
-      [key]: Math.max(0, prev[key] + value),
+      [key]: Math.max(0, (prev[key]||0)+ value),
     }));
   };
 
@@ -41,6 +41,7 @@ export default function Passengers({ passengers, setPassengers }) {
               startAdornment={
                 <InputAdornment position="start">
                   <PersonIcon />
+                  {sum}
                 </InputAdornment>
               }
               label="Trip Type"
@@ -50,8 +51,8 @@ export default function Passengers({ passengers, setPassengers }) {
           {[
             { label: "Adults", key: "adults" },
             { label: "children", key: "childern", subLabel: "2-11" },
-            { label: "Infants", key: "InfantsSeat", subLabel: "In seat" },
-            { label: "Infants", key: "InfantsLabel", subLabel: "On lap" },
+            { label: "Infants", key: "infantsSeat", subLabel: "In seat" },
+            { label: "Infants", key: "infantsLabel", subLabel: "On lap" },
           ].map(({ label, subLabel, key }) => {
             return (
               <Grid
@@ -74,9 +75,9 @@ export default function Passengers({ passengers, setPassengers }) {
                       <AddBoxIcon />
                     </IconButton>
                   ) : (
-                    <Typography>cant handle more than 9 passengers</Typography>
+                    <></>
                   )}
-                  <Typography>{passengers[key]}</Typography>
+                  <Typography>{(passengers[key])}</Typography>
                   <IconButton
                     disabled={!passengers[key]}
                     onClick={() => handleChange(key, -1)}
@@ -87,8 +88,17 @@ export default function Passengers({ passengers, setPassengers }) {
               </Grid>
             );
           })}
+          {
+           sum>9&& <Typography variant="caption">
+              cant handle more than 9 passengers
+            </Typography>
+          }
         </Select>
+        
       </FormControl>
+      <Grid>
+     
+      </Grid>
     </Grid>
   );
 }
