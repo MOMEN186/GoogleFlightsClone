@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 
 const ThemeContext = createContext();
-const cookies = new Cookies(); 
 const lightTheme = createTheme({
   palette: {
     mode: "light",
@@ -16,25 +15,27 @@ const lightTheme = createTheme({
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
-    primary: { main: "#90caf9" },
+  primary: { main: "#90caf9" },
     background: { default: "#121212", paper: "#1e1e1e" },
-  },
+  text:{ primary: "#edeef1" },
+}
 });
 
 export function ThemeProviderWrapper({ children }) {
+  const cookies = new Cookies(); // Moved inside to avoid unnecessary instantiations
   const storedTheme = cookies.get("mode"); // ✅ Use the cookies instance
   const [mode, setMode] = useState(storedTheme === "dark" ? "dark" : "light");
+
+  useEffect(() => {
+    document.body.style.backgroundColor = mode === "dark" ? "#202124" : "white";
+  }, [mode]);
+
 
   const toggleMode = () => {
     const newMode = mode === "light" ? "dark" : "light";
     setMode(newMode);
-    cookies.set("mode", newMode, { path: "/", expires: new Date(2147483647 * 1000) }); // ✅ Save it globally
+    cookies.set("mode", newMode, { path: "/", expires: new Date(2147483647 * 1000) }); 
   };
-
-  // useEffect(() => {
-  //   console.log("Theme changed:", mode);
-  // }, [mode]);
-
   return (
     <ThemeContext.Provider value={{ mode, toggleMode }}>
       <ThemeProvider theme={mode === "light" ? lightTheme : darkTheme}>
