@@ -67,34 +67,40 @@ export default function Journey() {
   };
 
   
-
-    const handleSubmit = async () => {
-      let newResults = []; // Use an array instead of string concatenation
-      // console.log(flights);
-      for (const flight of flights) {
-        const departureDate = flight.departureDate;
-        const returnDate = flight.returnDate; // Assuming flight has arrivalDate
-        // console.log(flight)
-        for (const origin of flight.from) {
-          for (const destination of flight.to) {
-            try {
-              const response = await searchFlights(Class, passengers, departureDate,trip.value==="one way"?undefined: returnDate, origin, destination, "best");
-              newResults.push(response); // Push the response to the array
-            } catch (error) {
-              console.error("Error fetching flights:", error);
-            }
+  const handleSubmit = async () => {
+    let newResults = [];
+  
+    for (const flight of flights) {
+      const departureDate = flight.departureDate;
+      const returnDate = flight.returnDate;
+      for (const origin of flight.from) {
+        console.log(origin);
+        for (const destination of flight.to) {
+          console.log(destination);
+          try {
+            const response = await searchFlights(
+              Class,
+              passengers,
+              departureDate,
+              trip.value === "one way" ? undefined : returnDate,
+              origin,
+              destination,
+              "best"
+            );
+            newResults = newResults.concat(response);
+          } catch (error) {
+            console.error("Error fetching flights:", error);
           }
         }
       }
-    
-      setResult(newResults); // Store the results in state
-    };
-    
-
+    }
+  
+    setResult(newResults);
+  };
 
   return (
     <Grid>
-      <Paper elevation={3} width="500px">
+      <Paper display="flex" flexGrow={1} elevation={3}>
         <Grid
           display="flex"
           flexDirection="row"
@@ -160,17 +166,25 @@ export default function Journey() {
             </FormControl>
           </Grid>
         </Grid>
-        <Grid>
+        <Grid display={"flex"} justifyContent="space-between" flexDirection={"column"} alignItems={"center"}
+          rowGap={2}
+        >
           {flights &&
             flights.length &&
             flights.map((flight, index) => (
-              <Grid key={index} display="flex" flexDirection="row" justifyContent="space-between">
+              <Grid key={index}
+                display="flex" flexDirection="row"
+                justifyContent="space-between" alignItems="center"
+              >
+                <Grid>
+
                 <Trip
                   index={index}
                   setFlights={setFlights}
                   flights={flights}
                   trip={trip.value}
                 />
+                  </Grid>
                 {trip.value === "Multi-city" && flights.length > 1 && (
                   <IconButton onClick={() => handleDeleteFlight(flight)}>
                     <ClearIcon />

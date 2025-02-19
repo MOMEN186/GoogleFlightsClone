@@ -1,4 +1,4 @@
-const ApiKey = "6941fd122amshc49476df47d71fep177ae2jsnd0de9c601d2c";
+const ApiKey = "22b9458ea5msh12551b7e7cd0e42p17b753jsn94c9215c26fb";
 
 export async function getNearByAirPorts(location) {
   const url = `https://sky-scrapper.p.rapidapi.com/api/v1/flights/getNearByAirports?lat=${location.latitude}&lng=${location.longitude}&locale=en-US`;
@@ -28,7 +28,7 @@ export async function getPriceCalendar(
   returnDate
 ) {
   try {
-    console.log(returnDate);
+    console.log(origin);
     const originSkyId = origin[0].skyId;
     const destinationSkyId =
       destination[0]?.navigation?.relevantFlightParams?.skyId;
@@ -38,7 +38,8 @@ export async function getPriceCalendar(
 
     const url = `https://sky-scrapper.p.rapidapi.com/api/v1/flights/getPriceCalendar?originSkyId=${originSkyId}&destinationSkyId=${destinationSkyId}&fromDate=${departureDateStr}&toDate=${
       returnDateStr ? `${returnDateStr}` : ""
-    }&currency=USD`;
+      }&currency=USD`;
+    console.log(url);
     const result = await fetch(url, {
       method: "GET",
       headers: {
